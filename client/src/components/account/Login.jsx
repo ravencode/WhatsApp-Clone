@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { Dialog, withStyles, Box, Typography, makeStyles, ListItem , List} from "@material-ui/core";
-
+import GoogleLogin, { useGoogleLogin } from "react-google-login";
+import { AccountContext } from "../../context/AccountProvider";
 const useStyles = makeStyles({
     component: {
         display: 'flex'
@@ -39,7 +41,8 @@ const style = {
         boxShadow: 'none',
         borderRadius: 0,
         maxHeight: '100%',
-        maxWidth: '100%'
+        maxWidth: '100%',
+        overflow: 'hidden'
     }
 }
 
@@ -47,6 +50,17 @@ const style = {
 const Login = ({ classes }) => {
     const classname = useStyles();
     const qrurl = 'https://www.ginifab.com/feeds/qr_code/img/qrcode.jpg';
+    const clientId = '109730552815-qvi30r1e4jktc32lhd9um8i4ap3tdi79.apps.googleusercontent.com'
+
+    const { account , setAccount } = useContext(AccountContext);
+
+    const onLoginSuccess = (res) => {
+        console.log('Login Successfull', res.profileObj)
+        setAccount(res.profileObj);
+    }
+    const onLoginFailure = () => {
+        console.log('Login Failed')
+    }
     return(
         <Dialog
             open={true}
@@ -64,8 +78,18 @@ const Login = ({ classes }) => {
                         <ListItem>3. Point your phone to this screen to capture the code</ListItem>
                         </List>
                 </Box>
-                <Box>
+                <Box style={{position: 'relative'}}>
                     <img src={qrurl} alt='qr' className={classname.qrCode}  />
+                   <Box style={{position: 'absolute', left: '45%', top: '45%'}}>
+                    <GoogleLogin
+                        clientId={clientId}
+                        buttonText=""
+                        isSignedIn={true}
+                        onSuccess={onLoginSuccess}
+                        onFailure={onLoginFailure}
+                        cookiePolicy={'single_host_origin'}
+                     />
+                    </Box>
                 </Box>
             </Box>
         </Dialog>
