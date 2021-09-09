@@ -1,11 +1,53 @@
+import { Dialog, withStyles, Box, makeStyles} from "@material-ui/core";
+
+//components
+import Menu from "./menu/Menu";
+
+const useStyles = makeStyles({
+    component: {
+        display: 'flex'
+    },
+    leftComponent: {
+        minWidth: 380
+    },
+    rightComponent: {
+        borderLeft: '1px solid rgba(0, 0, 0, 0.14)'
+    }
+})
+
+const style = {
+    dialogPaper: {
+        height: '95%',
+        width: '91%',
+        
+        boxShadow: 'none',
+        borderRadius: 0,
+        maxHeight: '100%',
+        maxWidth: '100%',
+        overflow: 'hidden'
+    }
+}
 
 
-
-const ChatBox = () => {
+const ChatBox = ( { classes } ) => {
+    const classname = useStyles();
     return (
-        <p>Hellooo</p>
+        <Dialog
+          open={true}
+          classes ={{ paper: classes.dialogPaper }}
+          BackdropProps={{style: {backgroundColor: 'unset'}}}
+        >
+    <Box className={classname.component}>
+        <Box className={classname.leftComponent}>
+           <Menu />
+        </Box>
+        <Box className={classname.rightComponent}>
+            Hie
+        </Box>
+    </Box>
+        </Dialog>
     )
 }
 
 
-export default ChatBox;
+export default withStyles(style)(ChatBox);
